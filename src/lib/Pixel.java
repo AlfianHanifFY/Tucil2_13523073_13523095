@@ -11,6 +11,12 @@ public class Pixel {
         this.blue = _blue;
     }
 
+    public Pixel(Pixel other) {
+        this.red = other.red;
+        this.green = other.green;
+        this.blue = other.blue;
+    }
+
     public int getGreen() {
         return this.green;
     }
