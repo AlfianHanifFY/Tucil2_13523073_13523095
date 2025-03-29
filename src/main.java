@@ -11,6 +11,6 @@ public class Main {
         System.out.println("\u001B[34m[INFO]\u001B[0m" + " : Wilujeng Sumping...\n\n");
         System.out.println("\u001B[34m[INFO]\u001B[0m" + " : Masukkan alamat image ! \n");
         image = IO.readImage();
-        image.print();
+        image.print(1);
     }
 }
