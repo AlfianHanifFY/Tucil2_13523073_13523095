@@ -22,4 +22,10 @@ public class Pixel {
     public int getBlue() {
         return this.blue;
     }
+
+    public void print() {
+        System.out.print("R : " + getRed());
+        System.out.print(" | G : " + getGreen());
+        System.out.print(" | B : " + getBlue());
+    }
 }
