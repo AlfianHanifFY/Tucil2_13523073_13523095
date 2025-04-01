@@ -199,7 +199,7 @@ public class IO {
                 break;
             } catch (FileNotFoundException e) {
                 System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : File " + fileName
-                        + " tidak ditemukan di directory test/input.");
+                        + " tidak ditemukan di directory.");
             }
         }
         return fileName;
