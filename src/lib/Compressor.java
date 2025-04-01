@@ -4,13 +4,13 @@ public class Compressor {
 
     public static void compress(Quadtree qt) {
         qt.getinfoImage().setAvgPixel();
-        if (qt.getinfoImage().getRow() <= qt.getinfoImage().minimumBlockSize
-                || qt.getinfoImage().getCol() <= qt.getinfoImage().minimumBlockSize) {
+        if (qt.getinfoImage().getSize() <= qt.getinfoImage().minimumBlockSize) {
             return;
         }
 
         double variance = qt.getinfoImage().getErrorMeasurement();
-        if (variance > qt.getinfoImage().treshold) {
+        // System.out.println("Variance: " + variance);
+        if (variance > qt.getinfoImage().treshold ) {
             qt.split();
             compress(qt.getQ1());
             compress(qt.getQ2());

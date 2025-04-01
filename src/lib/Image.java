@@ -138,19 +138,21 @@ public class Image {
          * ILUSTRASI SPLIT
          * 
          * collection[0] | collection[1]
-         * -------------------------------
+         * --------------|--------------
          * collection[2] | collection[3]
          * 
          */
         Image[] collection = new Image[4];
         int midRow = rows / 2;
         int midCol = cols / 2;
+        
 
         collection[0] = new Image(this, midRow, midCol, this.rowStart, this.colStart, 0); // Top-left
         collection[1] = new Image(this, midRow, cols - midCol, this.rowStart, this.colStart + midCol, 1); // Top-right
         collection[2] = new Image(this, rows - midRow, midCol, this.rowStart + midRow, this.colStart, 2); // Bottom-left
         collection[3] = new Image(this, rows - midRow, cols - midCol, this.rowStart + midRow, this.colStart + midCol,
                 3); // Bottom-right
+
 
         return collection;
     }
@@ -183,48 +185,128 @@ public class Image {
     }
 
     private double Variance() {
-        double meanRed = 0, meanGreen = 0, meanBlue = 0;
-        int totalPixels = getRow() * getCol();
+        double redVariance = 0;
+        double greenVariance = 0;
+        double blueVariance = 0;
 
-        // Calculate mean values
         for (int i = 0; i < getRow(); i++) {
             for (int j = 0; j < getCol(); j++) {
                 Pixel p = getPixel(i, j);
-                meanRed += p.getRed();
-                meanGreen += p.getGreen();
-                meanBlue += p.getBlue();
+                redVariance += Math.pow(p.getRed() - avgPixel.getRed(), 2);
+                greenVariance += Math.pow(p.getGreen() - avgPixel.getGreen(), 2);
+                blueVariance += Math.pow(p.getBlue() - avgPixel.getBlue(), 2);
             }
         }
-        meanRed /= totalPixels;
-        meanGreen /= totalPixels;
-        meanBlue /= totalPixels;
+        redVariance /= getSize();
+        greenVariance /= getSize();
+        blueVariance /= getSize();
 
-        // Calculate variance
-        double variance = 0;
-        for (int i = 0; i < getRow(); i++) {
-            for (int j = 0; j < getCol(); j++) {
-                Pixel p = getPixel(i, j);
-                variance += Math.pow(p.getRed() - meanRed, 2);
-                variance += Math.pow(p.getGreen() - meanGreen, 2);
-                variance += Math.pow(p.getBlue() - meanBlue, 2);
-            }
-        }
-        return variance / (3 * totalPixels); // Normalize variance
+        return (redVariance + greenVariance + blueVariance) / 3;
+
     }
 
     public double MeanAbsoluteDeviation() {
-        return 0;
+        double redMAD = 0;
+        double greenMAD = 0;
+        double blueMAD = 0;
+
+        for (int i = 0; i < getRow(); i++) {
+            for (int j = 0; j < getCol(); j++) {
+                Pixel p = getPixel(i, j);
+                redMAD += Math.abs(p.getRed() - avgPixel.getRed());
+                greenMAD += Math.abs(p.getGreen() - avgPixel.getGreen());
+                blueMAD += Math.abs(p.getBlue() - avgPixel.getBlue());
+            }
+        }
+        redMAD /= getSize();
+        greenMAD /= getSize();
+        blueMAD /= getSize();
+
+        return (redMAD + greenMAD + blueMAD) / 3;
     }
 
     public double MaxPixelDifference() {
-        return 0;
+        double redDiff = 0;
+        double greenDiff = 0;
+        double blueDiff = 0;
+        double maxRed = 0;
+        double maxGreen = 0;
+        double maxBlue = 0;
+        double minRed = 255;
+        double minGreen = 255;
+        double minBlue = 255;
+        
+        // Find max and min red, green, and blue 
+        for (int i = 0; i < getRow(); i++) {
+            for (int j = 0; j < getCol(); j++) {
+                Pixel p = getPixel(i, j);
+                if (p.getRed() > maxRed) {
+                    maxRed = p.getRed();
+                }
+                else if (p.getRed() < minRed) {
+                    minRed = p.getRed();
+                }
+                if (p.getGreen() > maxGreen) {
+                    maxGreen = p.getGreen();
+                }
+                else if (p.getGreen() < minGreen) {
+                    minGreen = p.getGreen();
+                }
+                if (p.getBlue() > maxBlue) {
+                    maxBlue = p.getBlue();
+                }
+                else if (p.getBlue() < minBlue) {
+                    minBlue = p.getBlue();
+                }
+            }
+        }
+
+        redDiff = maxRed - minRed;
+        greenDiff = maxGreen - minGreen;
+        blueDiff = maxBlue - minBlue;
+
+        return (redDiff + greenDiff + blueDiff) / 3;
     }
 
     public double Entropy() {
-        return 0;
+        double redEntropy = 0;
+        double greenEntropy = 0;
+        double blueEntropy = 0;
+        int redCount[] = new int[256];
+        int greenCount[] = new int[256];
+        int blueCount[] = new int[256];
+
+        // masukkan ke list agar bisa dihitung peluangnya
+        for (int i = 0; i < getRow(); i++) {
+            for (int j = 0; j < getCol(); j++) {
+                Pixel p = getPixel(i, j);
+                redCount[p.getRed()]++;
+                greenCount[p.getGreen()]++;
+                blueCount[p.getBlue()]++;
+            }
+        }
+
+        for (int i = 0; i < 256; i++) {
+            if (redCount[i] != 0) {
+                redEntropy += (double) redCount[i] / getSize() * Math.log((double) redCount[i] / getSize());
+            }
+            if (greenCount[i] != 0) {
+                greenEntropy += (double) greenCount[i] / getSize() * Math.log((double) greenCount[i] / getSize());
+            }
+            if (blueCount[i] != 0) {
+                blueEntropy += (double) blueCount[i] / getSize() * Math.log((double) blueCount[i] / getSize());
+            }
+        }
+
+        redEntropy *= -1;
+        greenEntropy *= -1;
+        blueEntropy *= -1;
+
+        return (redEntropy + greenEntropy + blueEntropy) / 3;
     }
 
     public double SSIM() {
         return 0;
     }
+     
 }

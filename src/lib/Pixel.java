@@ -21,12 +21,24 @@ public class Pixel {
         return this.green;
     }
 
+    public void setGreen(int green) {
+        this.green = green;
+    }
+
     public int getRed() {
         return this.red;
     }
 
+    public void setRed(int red) {
+        this.red = red;
+    }
+
     public int getBlue() {
         return this.blue;
+    }
+
+    public void setBlue(int blue) {
+        this.blue = blue;
     }
 
     public void print() {
@@ -34,4 +46,5 @@ public class Pixel {
         System.out.print(" | G : " + getGreen());
         System.out.print(" | B : " + getBlue());
     }
+
 }

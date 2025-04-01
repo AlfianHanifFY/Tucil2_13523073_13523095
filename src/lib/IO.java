@@ -3,6 +3,10 @@ package lib;
 import java.util.*;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
 import java.awt.image.BufferedImage;
@@ -60,7 +64,7 @@ public class IO {
                 }
 
             } catch (NumberFormatException e) {
-                System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan wajib integer !");
+                System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukan wajib integer !");
             }
         }
         return method;
@@ -68,28 +72,83 @@ public class IO {
     }
 
     /* HARUS DIUBAH */
-    public static double readThreshold() {
+    public static double readThreshold(int method) {
         double Threshold = -1;
-
+        
         System.out.println("\n\u001B[34m[INFO]\u001B[0m : Masukkan Threshold !");
+
+        if (method == 1){
+            
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 0,5 - 5");
+        }
+
+        else if (method == 2){
+           
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 1 - 10");
+        }
+
+        else if (method == 3){
+            
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 10 - 25");
+        }
+
+        else if (method == 4){
+            
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 0,1 - 1,5");
+        }
+
+        else if (method == 5){
+            
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 0,5 - 10");
+        }
+
+        System.out.println("");
+
+        // System.out.println("\n\u001B[34m[INFO]\u001B[0m : Masukkan Threshold !");
+
         while (true) {
             try {
                 System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
-                Threshold = inputScanner.nextInt();
-                /* nanti di atur validasi Threshold sesuai variance */
+                Threshold = inputScanner.nextDouble(); // Gunakan nextDouble() untuk angka desimal
+
+                if (Threshold < 0) {
+                    System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan Threshold positif !");
+                    continue;
+                }
+
                 break;
-            } catch (NumberFormatException e) {
-                System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan wajib integer !");
+            } catch (InputMismatchException e) { // Tangkap InputMismatchException
+                System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan angka yang valid (gunakan koma untuk desimal)!");
+                inputScanner.next(); // Bersihkan input yang salah
             }
         }
 
         return Threshold;
     }
 
-    public static int readMinBlock() {
+    public static int readMinBlock(Image img) {
         int minBlock = -1;
 
-        System.out.println("\n\u001B[34m[INFO]\u001B[0m : Masukkan Minimum Block !");
+        System.out.println("");
+
+        System.out.print("\u001B[34m[INFO]\u001B[0m : Ukuran Gambar Anda : " + img.getRow() + " x " + img.getCol() + " atau " + img.getSize() + " pixel");
+        System.out.print("\n\u001B[34m[INFO]\u001B[0m : Masukkan Minimum Block !");
+
+        if (img.getSize() < (128 * 128)) {
+            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 16 - 36 (4x4 - 6x6)");
+        } else if (img.getSize() < (256 * 256)) {
+            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 36 - 64 (6x6 - 8x8)");
+        } else if (img.getSize() < (512 * 512)) {
+            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 64 - 144 (8x8 - 12x12)");
+        } else if (img.getSize() < (1024 * 1024)) {
+            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 144 - 256 (12x12 - 16x16)");
+        } else {
+            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 256 - 400 (16x16 - 20x20)");
+        }
+        System.out.println("");
+        
+        
+        
         while (true) {
             try {
                 System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
@@ -146,10 +205,10 @@ public class IO {
         return fileName;
     }
 
-    public static Image readImage() {
+    public static Image readImage(String fileName) {
         Image image = new Image(0, 0);
         try {
-            String fileName = IO.readFileName();
+            // String fileName = IO.readFileName();
             File file = new File(fileName);
             BufferedImage img = ImageIO.read(file);
             int width = img.getWidth();
@@ -233,7 +292,7 @@ public class IO {
             }
             File outputFile = new File(filePath);
             ImageIO.write(image, format, outputFile);
-            System.out.println("\u001B[32m[SUKSES]\u001B[0m : Gambar berhasil disimpan sebagai " + filePath);
+            // System.out.println("\u001B[32m[SUKSES]\u001B[0m : Gambar berhasil disimpan sebagai " + filePath);
 
         } catch (Exception e) {
             System.out.println("\u001B[31m[ERROR]\u001B[0m : Gagal menyimpan gambar!");
@@ -247,5 +306,26 @@ public class IO {
     public static boolean isSupportedFormat(String format) {
         Iterator<ImageWriter> writers = ImageIO.getImageWritersBySuffix(format);
         return writers.hasNext();
+    }
+
+    public static long getFileSize(String filePath) {
+        Path path = Paths.get(filePath);
+        long fileSize = -1;  // Jika file tidak ditemukan atau error, return -1
+        
+        try {
+            fileSize = Files.size(path);
+        } catch (IOException e) {
+            System.err.println("\u001B[31m[ERROR]\u001B[0m : Gagal membaca ukuran file " + filePath);
+            e.printStackTrace();
+        }
+        
+        return fileSize;
+    }
+
+    public static double calculateCompressionPercentage(long inputSize, long outputSize) {
+        if (inputSize == 0) {
+            return 0; // Hindari pembagian dengan nol
+        }
+        return 100.0 * (1 - ((double) outputSize / inputSize));
     }
 }
