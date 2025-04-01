@@ -79,4 +79,24 @@ public class Quadtree {
         }
     }
 
+    public int getDepth() {
+        if (isLeaf()) {
+            return 0;
+        } else {
+            int d1 = Q1.getDepth();
+            int d2 = Q2.getDepth();
+            int d3 = Q3.getDepth();
+            int d4 = Q4.getDepth();
+            return 1 + Math.max(Math.max(d1, d2), Math.max(d3, d4));
+        }
+    }
+
+    public int countNodes() {
+        if (isLeaf()) {
+            return 1;
+        } else {
+            return 1 + Q1.countNodes() + Q2.countNodes() + Q3.countNodes() + Q4.countNodes();
+        }
+    }
+
 }
