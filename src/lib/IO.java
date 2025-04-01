@@ -84,7 +84,7 @@ public class IO {
 
         else if (method == 2){
            
-            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 1 - 10");
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 1 - 5");
         }
 
         else if (method == 3){
