@@ -7,4 +7,4 @@ by alfian & rafif
 javac -d bin -cp src $(find src -name "\*.java")
 
 <br>
-java -cp bin Main
+java -cp bin main
