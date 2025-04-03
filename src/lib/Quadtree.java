@@ -1,12 +1,20 @@
 package lib;
 
 public class Quadtree {
-    private Image info;
     private boolean leaf;
+    private int startRow;
+    private int startCol;
+    private int row;
+    private int col;
+    private Pixel avgPixel;
     private Quadtree Q1, Q2, Q3, Q4;
 
-    public Quadtree(Image image) {
-        this.info = image;
+    public Quadtree(int row, int col, int startRow, int startCol) {
+        this.row = row;
+        this.col = col;
+        this.startCol = startCol;
+        this.startRow = startRow;
+        this.avgPixel = null;
         this.leaf = true;
         this.Q1 = null;
         this.Q2 = null;
@@ -14,8 +22,24 @@ public class Quadtree {
         this.Q4 = null;
     }
 
-    public Image getinfoImage() {
-        return this.info;
+    public Pixel getAvgPixel() {
+        return this.avgPixel;
+    }
+
+    public int getRow() {
+        return this.row;
+    }
+
+    public int getCol() {
+        return this.col;
+    }
+
+    public int getStartRow() {
+        return this.startRow;
+    }
+
+    public int getStartCol() {
+        return this.startCol;
     }
 
     public void setLeaf(boolean b) {
@@ -57,11 +81,12 @@ public class Quadtree {
     public void split() {
         if (isLeaf()) {
             setLeaf(false);
-            Image[] collectionImages = this.info.splitImage();
-            this.Q1 = new Quadtree(collectionImages[0]);
-            this.Q2 = new Quadtree(collectionImages[1]);
-            this.Q3 = new Quadtree(collectionImages[2]);
-            this.Q4 = new Quadtree(collectionImages[3]);
+            int midRow = row / 2;
+            int midCol = col / 2;
+            this.Q1 = new Quadtree(midRow, midCol, this.startRow, this.startCol);
+            this.Q2 = new Quadtree(midRow, this.col - midCol, this.startRow, this.startCol + midCol);
+            this.Q3 = new Quadtree(this.row - midRow, midCol, this.startRow + midRow, this.startCol);
+            this.Q4 = new Quadtree(row - midRow, col - midCol, this.startRow + midRow, this.startCol + midCol);
         }
     }
 
@@ -99,4 +124,21 @@ public class Quadtree {
         }
     }
 
+    public void calcAvgPixel() {
+        int red = 0;
+        int green = 0;
+        int blue = 0;
+        int totalPixels = getRow() * getCol();
+
+        for (int i = startRow; i < getRow() + startRow; i++) {
+            for (int j = startCol; j < getCol() + startCol; j++) {
+                Pixel p = IO.infoImage.getPixel(i, j);
+                red += p.getRed();
+                green += p.getGreen();
+                blue += p.getBlue();
+            }
+        }
+
+        this.avgPixel = new Pixel(red / totalPixels, green / totalPixels, blue / totalPixels);
+    }
 }
