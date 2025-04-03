@@ -10,12 +10,12 @@ public class main {
         System.out.println("\u001B[34m[INFO]\u001B[0m : Masukkan alamat ABSOLUT image ! \n");
 
         String inputFile = IO.readFileName();
-        Image image = IO.readImage(inputFile);
+        IO.readImage(inputFile);
         int method = IO.readErorrMethod();
         double Threshold = IO.readThreshold(method);
-        int minBlock = IO.readMinBlock(image);
+        int minBlock = IO.readMinBlock(IO.infoImage);
 
-        image.setImageParam(method, Threshold, minBlock);
+        IO.infoImage.setImageParam(method, Threshold, minBlock);
 
         System.out.println("");
 
@@ -23,7 +23,7 @@ public class main {
 
         long startTime = System.currentTimeMillis();
 
-        Quadtree quadtree = new Quadtree(image);
+        Quadtree quadtree = new Quadtree(IO.infoImage.getRow(), IO.infoImage.getCol(), 0, 0);
         Compressor.compress(quadtree);
 
         long endTime = System.currentTimeMillis();
@@ -40,12 +40,10 @@ public class main {
         // UKURAN FILE INPUT
         long fileInputSizeInBytes = IO.getFileSize(inputFile);
         System.out.println("\u001B[32m[SUKSES]\u001B[0m : Ukuran File Input : " + fileInputSizeInBytes + " bytes");
-        
 
         // UKURAN FILE OUTPUT
         long fileOutputSizeInBytes = IO.getFileSize(outputFile);
         System.out.println("\u001B[32m[SUKSES]\u001B[0m : Ukuran File Output : " + fileOutputSizeInBytes + " bytes");
-        
 
         // Persentase Kompresi
         double compressionRate = IO.calculateCompressionPercentage(fileInputSizeInBytes, fileOutputSizeInBytes);
@@ -58,7 +56,7 @@ public class main {
         // Banyak Simpul
         int nodeCount = quadtree.countNodes();
         System.out.println("\u001B[32m[SUKSES]\u001B[0m : Banyak Simpul : " + nodeCount);
-        
+
         // Output Path Img
         System.out.println("\u001B[32m[SUKSES]\u001B[0m : Gambar berhasil disimpan sebagai " + outputFile + "\n");
     }
