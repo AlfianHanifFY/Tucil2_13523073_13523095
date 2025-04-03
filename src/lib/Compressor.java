@@ -3,14 +3,16 @@ package lib;
 public class Compressor {
 
     public static void compress(Quadtree qt) {
-        qt.getinfoImage().setAvgPixel();
-        if (qt.getinfoImage().getSize() <= qt.getinfoImage().minimumBlockSize) {
+        qt.calcAvgPixel();
+        if (qt.getCol() * qt.getRow() <= IO.infoImage.minimumBlockSize) {
             return;
         }
 
-        double variance = qt.getinfoImage().getErrorMeasurement();
+        double variance = IO.infoImage.getErrorMeasurement(qt.getStartRow(), qt.getStartCol(), qt.getRow(),
+                qt.getCol(), qt.getAvgPixel());
+
         // System.out.println("Variance: " + variance);
-        if (variance > qt.getinfoImage().treshold ) {
+        if (variance > IO.infoImage.treshold) {
             qt.split();
             compress(qt.getQ1());
             compress(qt.getQ2());
