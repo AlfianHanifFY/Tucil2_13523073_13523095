@@ -16,6 +16,7 @@ public class IO {
     public String fileName;
     public Scanner fileScanner;
     public static Scanner inputScanner = new Scanner(System.in);
+    public static Image infoImage;
 
     // Konstruktor
     public IO(String fileName) {
@@ -74,31 +75,31 @@ public class IO {
     /* HARUS DIUBAH */
     public static double readThreshold(int method) {
         double Threshold = -1;
-        
+
         System.out.println("\n\u001B[34m[INFO]\u001B[0m : Masukkan Threshold !");
 
-        if (method == 1){
-            
+        if (method == 1) {
+
             System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 0,5 - 5");
         }
 
-        else if (method == 2){
-           
+        else if (method == 2) {
+
             System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 1 - 5");
         }
 
-        else if (method == 3){
-            
+        else if (method == 3) {
+
             System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 10 - 25");
         }
 
-        else if (method == 4){
-            
+        else if (method == 4) {
+
             System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 0,1 - 1,5");
         }
 
-        else if (method == 5){
-            
+        else if (method == 5) {
+
             System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 0,5 - 10");
         }
 
@@ -118,7 +119,8 @@ public class IO {
 
                 break;
             } catch (InputMismatchException e) { // Tangkap InputMismatchException
-                System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan angka yang valid (gunakan koma untuk desimal)!");
+                System.out.println(
+                        "\u001B[33m[WARNING]\u001B[0m" + " : Masukkan angka yang valid (gunakan koma untuk desimal)!");
                 inputScanner.next(); // Bersihkan input yang salah
             }
         }
@@ -131,7 +133,8 @@ public class IO {
 
         System.out.println("");
 
-        System.out.print("\u001B[34m[INFO]\u001B[0m : Ukuran Gambar Anda : " + img.getRow() + " x " + img.getCol() + " atau " + img.getSize() + " pixel");
+        System.out.print("\u001B[34m[INFO]\u001B[0m : Ukuran Gambar Anda : " + img.getRow() + " x " + img.getCol()
+                + " atau " + img.getSize() + " pixel");
         System.out.print("\n\u001B[34m[INFO]\u001B[0m : Masukkan Minimum Block !");
 
         if (img.getSize() < (128 * 128)) {
@@ -146,9 +149,7 @@ public class IO {
             System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 256 - 400 (16x16 - 20x20)");
         }
         System.out.println("");
-        
-        
-        
+
         while (true) {
             try {
                 System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
@@ -205,7 +206,7 @@ public class IO {
         return fileName;
     }
 
-    public static Image readImage(String fileName) {
+    public static void readImage(String fileName) {
         Image image = new Image(0, 0);
         try {
             // String fileName = IO.readFileName();
@@ -228,8 +229,7 @@ public class IO {
         } catch (Exception e) {
             System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Gagal memproses image !");
         }
-
-        return image;
+        infoImage = image;
     }
 
     private static void reconstructImage(Quadtree qt, BufferedImage image) {
@@ -237,11 +237,11 @@ public class IO {
             return;
 
         if (qt.isLeaf()) {
-            Pixel p = qt.getinfoImage().getAvgPixel();
-            int startRow = qt.getinfoImage().getStartRow();
-            int startCol = qt.getinfoImage().getStartCol();
-            int endRow = startRow + qt.getinfoImage().getRow();
-            int endCol = startCol + qt.getinfoImage().getCol();
+            Pixel p = qt.getAvgPixel();
+            int startRow = qt.getStartRow();
+            int startCol = qt.getStartCol();
+            int endRow = startRow + qt.getRow();
+            int endCol = startCol + qt.getCol();
 
             for (int y = startRow; y < endRow; y++) {
                 for (int x = startCol; x < endCol; x++) {
@@ -276,8 +276,8 @@ public class IO {
     public static void saveImage(String filePath, Quadtree qt) {
 
         try {
-            int width = qt.getinfoImage().getCol();
-            int height = qt.getinfoImage().getRow();
+            int width = qt.getCol();
+            int height = qt.getRow();
             BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
             reconstructImage(qt, image);
@@ -292,7 +292,8 @@ public class IO {
             }
             File outputFile = new File(filePath);
             ImageIO.write(image, format, outputFile);
-            // System.out.println("\u001B[32m[SUKSES]\u001B[0m : Gambar berhasil disimpan sebagai " + filePath);
+            // System.out.println("\u001B[32m[SUKSES]\u001B[0m : Gambar berhasil disimpan
+            // sebagai " + filePath);
 
         } catch (Exception e) {
             System.out.println("\u001B[31m[ERROR]\u001B[0m : Gagal menyimpan gambar!");
@@ -310,15 +311,15 @@ public class IO {
 
     public static long getFileSize(String filePath) {
         Path path = Paths.get(filePath);
-        long fileSize = -1;  // Jika file tidak ditemukan atau error, return -1
-        
+        long fileSize = -1; // Jika file tidak ditemukan atau error, return -1
+
         try {
             fileSize = Files.size(path);
         } catch (IOException e) {
             System.err.println("\u001B[31m[ERROR]\u001B[0m : Gagal membaca ukuran file " + filePath);
             e.printStackTrace();
         }
-        
+
         return fileSize;
     }
 
