@@ -167,10 +167,33 @@ public class IO {
         return minBlock;
     }
 
-    public static String readOutputPath() {
-        System.out.println("\n\u001B[34m[INFO]\u001B[0m : Masukkan alamat (ABSOLUT) output !");
+    public static String readOutputPath(String inputPath) {
+        System.out.println("\n\u001B[34m[INFO]\u001B[0m : Masukkan alamat (ABSOLUT) output hasil kompresi !");
         String fileName = "";
         inputScanner.nextLine();
+        String inputFormat = inputPath.substring(inputPath.lastIndexOf('.') + 1).toLowerCase();
+        while (true) {
+            System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
+            fileName = inputScanner.nextLine();
+            // Ambil ekstensi file dari filePath
+            String format = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+
+            // Cek apakah format output sama seperti format input
+            if (!format.equals(inputFormat)) {
+                System.out.println(
+                        "\u001B[33m[WARNING]\u001B[0m : Format tidak sama dengan format input! Gunakan format gambar yang sama (."
+                                + inputFormat + ") ");
+            } else {
+                break;
+            }
+
+        }
+        return fileName;
+    }
+
+    public static String readOutputGIFPath() {
+        System.out.println("\n\u001B[34m[INFO]\u001B[0m : Masukkan alamat (ABSOLUT) output GIF !");
+        String fileName = "";
         while (true) {
             System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
             fileName = inputScanner.nextLine();
@@ -178,9 +201,9 @@ public class IO {
             String format = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
 
             // Cek apakah format didukung oleh ImageIO
-            if (!isSupportedFormat(format)) {
+            if (!format.equals("gif")) {
                 System.out.println(
-                        "\u001B[33m[WARNING]\u001B[0m : Format tidak didukung! Gunakan format gambar yang valid.");
+                        "\u001B[33m[WARNING]\u001B[0m : Format tidak didukung! Gunakan format GIF yang valid ! (.gif)");
             } else {
                 break;
             }

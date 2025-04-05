@@ -30,10 +30,11 @@ public class Main {
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
 
-        String outputFile = IO.readOutputPath();
+        String outputFile = IO.readOutputPath(inputFile);
+        String outputGIFFile = IO.readOutputGIFPath();
         BufferedImage[] frames = IO.reconstructImageByDepth(quadtree, IO.infoImage.getCol(), IO.infoImage.getRow());
         IO.saveImage(outputFile, quadtree);
-        IO.createGIF(frames, "/Users/alfianhaniffy/INFORMATIKA/STIMA/Tucil2/test/output/test.gif", 1000);
+        IO.createGIF(frames, outputGIFFile, 500);
 
         // OUTPUT //
         System.out.println("\u001B[32m--------[OUTPUT]--------\u001B[0m");
