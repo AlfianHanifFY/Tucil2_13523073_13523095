@@ -1,3 +1,4 @@
+import java.awt.image.BufferedImage;
 import java.util.*;
 import lib.*;
 
@@ -30,7 +31,9 @@ public class main {
         long executionTime = endTime - startTime;
 
         String outputFile = IO.readOutputPath();
+        BufferedImage[] frames = IO.reconstructImageByDepth(quadtree, IO.infoImage.getCol(), IO.infoImage.getRow());
         IO.saveImage(outputFile, quadtree);
+        IO.createGIF(frames, "/Users/alfianhaniffy/INFORMATIKA/STIMA/Tucil2/test/output/test.gif", 1000);
 
         // OUTPUT //
         System.out.println("\u001B[32m--------[OUTPUT]--------\u001B[0m");
