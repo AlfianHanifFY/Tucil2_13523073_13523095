@@ -1,7 +1,8 @@
+import java.awt.image.BufferedImage;
 import java.util.*;
 import lib.*;
 
-public class main {
+public class Main {
     static Scanner inputScanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -10,12 +11,12 @@ public class main {
         System.out.println("\u001B[34m[INFO]\u001B[0m : Masukkan alamat ABSOLUT image ! \n");
 
         String inputFile = IO.readFileName();
-        Image image = IO.readImage(inputFile);
+        IO.readImage(inputFile);
         int method = IO.readErorrMethod();
         double Threshold = IO.readThreshold(method);
-        int minBlock = IO.readMinBlock(image);
+        int minBlock = IO.readMinBlock(IO.infoImage);
 
-        image.setImageParam(method, Threshold, minBlock);
+        IO.infoImage.setImageParam(method, Threshold, minBlock);
 
         System.out.println("");
 
@@ -23,14 +24,17 @@ public class main {
 
         long startTime = System.currentTimeMillis();
 
-        Quadtree quadtree = new Quadtree(image);
+        Quadtree quadtree = new Quadtree(IO.infoImage.getRow(), IO.infoImage.getCol(), 0, 0);
         Compressor.compress(quadtree);
 
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
 
-        String outputFile = IO.readOutputPath();
+        String outputFile = IO.readOutputPath(inputFile);
+        String outputGIFFile = IO.readOutputGIFPath();
+        BufferedImage[] frames = IO.reconstructImageByDepth(quadtree, IO.infoImage.getCol(), IO.infoImage.getRow());
         IO.saveImage(outputFile, quadtree);
+        IO.createGIF(frames, outputGIFFile, 500);
 
         // OUTPUT //
         System.out.println("\u001B[32m--------[OUTPUT]--------\u001B[0m");
@@ -40,12 +44,10 @@ public class main {
         // UKURAN FILE INPUT
         long fileInputSizeInBytes = IO.getFileSize(inputFile);
         System.out.println("\u001B[32m[SUKSES]\u001B[0m : Ukuran File Input : " + fileInputSizeInBytes + " bytes");
-        
 
         // UKURAN FILE OUTPUT
         long fileOutputSizeInBytes = IO.getFileSize(outputFile);
         System.out.println("\u001B[32m[SUKSES]\u001B[0m : Ukuran File Output : " + fileOutputSizeInBytes + " bytes");
-        
 
         // Persentase Kompresi
         double compressionRate = IO.calculateCompressionPercentage(fileInputSizeInBytes, fileOutputSizeInBytes);
@@ -58,7 +60,7 @@ public class main {
         // Banyak Simpul
         int nodeCount = quadtree.countNodes();
         System.out.println("\u001B[32m[SUKSES]\u001B[0m : Banyak Simpul : " + nodeCount);
-        
+
         // Output Path Img
         System.out.println("\u001B[32m[SUKSES]\u001B[0m : Gambar berhasil disimpan sebagai " + outputFile + "\n");
     }
