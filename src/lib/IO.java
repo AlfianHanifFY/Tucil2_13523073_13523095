@@ -9,6 +9,9 @@ import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
+
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 
@@ -329,4 +332,65 @@ public class IO {
         }
         return 100.0 * (1 - ((double) outputSize / inputSize));
     }
+
+    public static BufferedImage[] reconstructImageByDepth(Quadtree qt, int width, int height) {
+        int depth = qt.getDepth();
+        BufferedImage[] frames = new BufferedImage[depth + 1];
+
+        for (int i = 0; i <= depth; i++) {
+            frames[i] = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            if (i > 0) {
+                frames[i].getGraphics().drawImage(frames[i - 1], 0, 0, null);
+            }
+        }
+
+        fillImages(qt, frames, 0);
+
+        return frames;
+    }
+
+    private static void fillImages(Quadtree qt, BufferedImage[] frames, int currentDepth) {
+        if (qt == null)
+            return;
+
+        Pixel p = qt.getAvgPixel();
+        int startRow = qt.getStartRow();
+        int startCol = qt.getStartCol();
+        int endRow = startRow + qt.getRow();
+        int endCol = startCol + qt.getCol();
+
+        for (int y = startRow; y < endRow; y++) {
+            for (int x = startCol; x < endCol; x++) {
+                if (x >= 0 && x < frames[0].getWidth() && y >= 0 && y < frames[0].getHeight()) {
+                    int color = new Color(p.getRed(), p.getGreen(), p.getBlue()).getRGB();
+                    for (int i = currentDepth; i < frames.length; i++) {
+                        frames[i].setRGB(x, y, color);
+                    }
+                }
+            }
+        }
+
+        if (qt.getQ1() != null)
+            fillImages(qt.getQ1(), frames, currentDepth + 1);
+        if (qt.getQ2() != null)
+            fillImages(qt.getQ2(), frames, currentDepth + 1);
+        if (qt.getQ3() != null)
+            fillImages(qt.getQ3(), frames, currentDepth + 1);
+        if (qt.getQ4() != null)
+            fillImages(qt.getQ4(), frames, currentDepth + 1);
+    }
+
+    public static void createGIF(BufferedImage[] frames, String outputFilePath, int delay) {
+        AnimatedGifEncoder e = new AnimatedGifEncoder();
+        e.start(outputFilePath);
+        e.setDelay(delay);
+        e.setRepeat(0); // 0 = loop forever
+
+        for (BufferedImage frame : frames) {
+            e.addFrame(frame);
+        }
+
+        e.finish();
+    }
+
 }
