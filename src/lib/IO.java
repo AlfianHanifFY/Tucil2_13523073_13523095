@@ -14,6 +14,7 @@ import javax.imageio.stream.ImageOutputStream;
 
 import java.awt.image.BufferedImage;
 import java.awt.Color;
+import com.madgag.gif.fmsware.AnimatedGifEncoder;
 
 public class IO {
     public String fileName;
