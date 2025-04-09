@@ -74,7 +74,7 @@ Jika ingin langsung menjalankan program tanpa mengompilasi ulang:
 java -jar Tucil2_13523073_13523095.jar
 ```
 
-### Re-compile
+### Re-Compile (Optional)
 
 - pastikan untuk mengunduh dan menginstal library berikut:
   <br>
