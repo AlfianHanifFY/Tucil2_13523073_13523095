@@ -1,7 +1,7 @@
 Install external library untuk gif-encoder pada pranala berikut : 
 https://github.com/rtyley/animated-gif-lib-for-java
 
-letakkan folder hasil install pada directory ini sehingga directory tree seperti ini 
+Simpan folder hasil install pada directory `src/external_lib` sehingga directory tree seperti ini 
 
 ├── src
 │   ├── Main.java
