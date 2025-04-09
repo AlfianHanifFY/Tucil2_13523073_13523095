@@ -3,7 +3,7 @@ Kompresi Gambar dengan Metode Quadtree
 </h1>
 
 <p align="center">
-  <img src="doc/river.gif" alt="Demo" style="max-width: 300px; max-height: 400px;" />
+  <img src="doc/river.gif" alt="Demo" width="300" height="400" />
 </p>
 
 ## About
