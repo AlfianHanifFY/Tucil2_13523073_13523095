@@ -4,7 +4,8 @@ public class Compressor {
 
     public static void compress(Quadtree qt) {
         qt.calcAvgPixel();
-        if (qt.getCol() * qt.getRow() <= IO.infoImage.minimumBlockSize) {
+        if (qt.getCol() * qt.getRow() <= IO.infoImage.minimumBlockSize
+                || qt.getCol() / 2 * qt.getRow() / 2 <= IO.infoImage.minimumBlockSize) {
             return;
         }
 
