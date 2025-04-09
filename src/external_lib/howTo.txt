@@ -1,0 +1,53 @@
+Install external library untuk gif-encoder pada pranala berikut : 
+https://github.com/rtyley/animated-gif-lib-for-java
+
+letakkan folder hasil install pada directory ini sehingga directory tree seperti ini 
+
+├── src
+│   ├── Main.java
+│   ├── external_lib
+│   │   ├── animated-gif-lib-for-java-master     // library yang di install
+│   │   │   ├── CONTRIBUTING.md
+│   │   │   ├── README.markdown
+│   │   │   ├── pom.xml
+│   │   │   └── src
+│   │   │       ├── main
+│   │   │       │   └── java
+│   │   │       │       └── com
+│   │   │       │           └── madgag
+│   │   │       │               └── gif
+│   │   │       │                   └── fmsware
+│   │   │       │                       ├── AnimatedGifEncoder.java
+│   │   │       │                       ├── GifDecoder.java
+│   │   │       │                       ├── LZWEncoder.java
+│   │   │       │                       └── NeuQuant.java
+│   │   │       └── test
+│   │   │           ├── java
+│   │   │           │   └── com
+│   │   │           │       └── madgag
+│   │   │           │           └── gif
+│   │   │           │               └── fmsware
+│   │   │           │                   ├── TestAnimatedGifEncoder.java
+│   │   │           │                   └── TestGifDecoder.java
+│   │   │           └── resources
+│   │   │               ├── AandB-transparent.gif
+│   │   │               ├── AandB.gif
+│   │   │               ├── AandBCloseToBlue.gif
+│   │   │               ├── a.gif
+│   │   │               ├── b.gif
+│   │   │               ├── brucelee-frame.gif
+│   │   │               ├── brucelee.gif
+│   │   │               ├── sonic-big-and-red.gif
+│   │   │               ├── sonic-blue-transparent.gif
+│   │   │               ├── sonic-green-bg-blue-transparent.gif
+│   │   │               ├── sonic-normal.gif
+│   │   │               ├── sonic1.png
+│   │   │               └── sonic2.png
+│   │   └── howTo.txt
+│   └── lib
+│       ├── Compressor.java
+│       ├── IO.java
+│       ├── Image.java
+│       ├── Pixel.java
+│       └── Quadtree.java
+
