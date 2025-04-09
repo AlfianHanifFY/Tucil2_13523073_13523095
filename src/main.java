@@ -2,7 +2,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import lib.*;
 
-public class Main {
+public class main {
     static Scanner inputScanner = new Scanner(System.in);
 
     public static void main(String[] args) {
