@@ -62,7 +62,6 @@ public class IO {
             try {
                 System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
                 method = inputScanner.nextInt();
-                System.out.println(method);
                 if (method >= 1 && method <= 5) {
                     break;
                 } else {
@@ -85,25 +84,29 @@ public class IO {
         if (method == 1) {
             System.out.println("\u001B[34m[INFO]\u001B[0m : Threshold min adalah : 0 dan max adalah : 255");
 
-            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 1 - 5");
+            System.out.println(
+                    "\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 1 - 5");
         }
 
         else if (method == 2) {
             System.out.println("\u001B[34m[INFO]\u001B[0m : Threshold min adalah : 0 dan max adalah : 255");
 
-            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 1 - 5");
+            System.out.println(
+                    "\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 1 - 5");
         }
 
         else if (method == 3) {
             System.out.println("\u001B[34m[INFO]\u001B[0m : Threshold min adalah : 0 dan max adalah : 255");
 
-            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 1 - 5");
+            System.out.println(
+                    "\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 1 - 5");
         }
 
         else if (method == 4) {
             System.out.println("\u001B[34m[INFO]\u001B[0m : Threshold min adalah : 0 dan max adalah : 8");
 
-            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 0,1 - 1");
+            System.out.println(
+                    "\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 0,1 - 1");
 
         }
 
@@ -111,7 +114,8 @@ public class IO {
 
             System.out.println("\u001B[34m[INFO]\u001B[0m : Threshold min adalah : 0 dan max adalah : 1");
 
-            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 0,1-0,5");
+            System.out.println(
+                    "\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 0,1-0,5");
         }
 
         System.out.println("");
@@ -128,7 +132,7 @@ public class IO {
                     continue;
                 }
 
-                if (method == 1){
+                if (method == 1) {
                     if (Threshold > 255) {
                         System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan Threshold <= 255 !");
                         continue;
@@ -166,7 +170,7 @@ public class IO {
         return Threshold;
     }
 
-    public static double readTargetCompression(){
+    public static double readTargetCompression() {
         double targetCompression = -1;
 
         System.out.println("\n\u001B[34m[INFO]\u001B[0m : Masukkan Target Compression (0 - 1) !");
@@ -174,7 +178,7 @@ public class IO {
         while (true) {
             try {
                 System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
-                targetCompression = inputScanner.nextDouble(); 
+                targetCompression = inputScanner.nextDouble();
                 if (targetCompression < 0 || targetCompression > 1) {
                     System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan Target Compression antara 0-1!");
                     continue;
@@ -191,37 +195,25 @@ public class IO {
         return targetCompression;
     }
 
-    public static int readMinBlock(Image img) {
+    public static int readMinBlock() {
         int minBlock = -1;
 
         System.out.println("");
 
-        System.out.print("\u001B[34m[INFO]\u001B[0m : Ukuran Gambar Anda : " + img.getRow() + " x " + img.getCol()
-                + " atau " + img.getSize() + " pixel");
         System.out.print("\n\u001B[34m[INFO]\u001B[0m : Masukkan Minimum Block !");
 
-        if (img.getSize() < (128 * 128)) { 
-            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 16 - 25 (4x4 - 5x5)");
-        } else if (img.getSize() < (256 * 256)) { 
-            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 25 - 36 (5x5 - 6x6)");
-        } else if (img.getSize() < (512 * 512)) { 
-            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 36 - 64 (6x6 - 8x8)");
-        } else if (img.getSize() < (1024 * 1024)) { 
-            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 64 - 100 (8x8 - 10x10)");
-        } else { 
-            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 100 - 144 (10x10 - 12x12)");
-        }
         System.out.println("");
-        
 
         while (true) {
             try {
                 System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
                 minBlock = inputScanner.nextInt();
                 /* nanti di atur validasi Threshold sesuai variance */
-                break;
+                if (minBlock > 0) {
+                    break;
+                }
             } catch (NumberFormatException e) {
-                System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan wajib integer !");
+                System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan wajib integer > 0 !");
             }
         }
 
@@ -417,23 +409,20 @@ public class IO {
         return 100.0 * (1 - ((double) outputSize / inputSize));
     }
 
-    public static BufferedImage[] reconstructImageByDepth(Quadtree qt, int width, int height) {
+    public static BufferedImage[] createProcessBufferedImages(Quadtree qt, int width, int height) {
         int depth = qt.getDepth();
         BufferedImage[] frames = new BufferedImage[depth + 1];
 
         for (int i = 0; i <= depth; i++) {
             frames[i] = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-            if (i > 0) {
-                frames[i].getGraphics().drawImage(frames[i - 1], 0, 0, null);
-            }
         }
 
-        fillImages(qt, frames, 0);
+        drawFrame(qt, frames, 0);
 
         return frames;
     }
 
-    private static void fillImages(Quadtree qt, BufferedImage[] frames, int currentDepth) {
+    private static void drawFrame(Quadtree qt, BufferedImage[] frames, int currentDepth) {
         if (qt == null)
             return;
 
@@ -455,13 +444,13 @@ public class IO {
         }
 
         if (qt.getQ1() != null)
-            fillImages(qt.getQ1(), frames, currentDepth + 1);
+            drawFrame(qt.getQ1(), frames, currentDepth + 1);
         if (qt.getQ2() != null)
-            fillImages(qt.getQ2(), frames, currentDepth + 1);
+            drawFrame(qt.getQ2(), frames, currentDepth + 1);
         if (qt.getQ3() != null)
-            fillImages(qt.getQ3(), frames, currentDepth + 1);
+            drawFrame(qt.getQ3(), frames, currentDepth + 1);
         if (qt.getQ4() != null)
-            fillImages(qt.getQ4(), frames, currentDepth + 1);
+            drawFrame(qt.getQ4(), frames, currentDepth + 1);
     }
 
     public static void createGIF(BufferedImage[] frames, String outputFilePath, int delay) {
