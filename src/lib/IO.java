@@ -211,9 +211,11 @@ public class IO {
                 /* nanti di atur validasi Threshold sesuai variance */
                 if (minBlock > 0) {
                     break;
+                } else {
+                    System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan harus > 0 !");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan wajib integer > 0 !");
+                System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan wajib integer !");
             }
         }
 
