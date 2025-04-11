@@ -62,10 +62,11 @@ public class IO {
             try {
                 System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
                 method = inputScanner.nextInt();
-                if (method >= 1 || method <= 5) {
+                System.out.println(method);
+                if (method >= 1 && method <= 5) {
                     break;
                 } else {
-                    System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan integer (1 -- 5) !");
+                    System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan integer (1 -- 4) !");
                 }
 
             } catch (NumberFormatException e) {
@@ -76,35 +77,41 @@ public class IO {
 
     }
 
-    /* HARUS DIUBAH */
     public static double readThreshold(int method) {
         double Threshold = -1;
 
         System.out.println("\n\u001B[34m[INFO]\u001B[0m : Masukkan Threshold !");
 
         if (method == 1) {
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Threshold min adalah : 0 dan max adalah : 255");
 
-            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 0,5 - 5");
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 1 - 5");
         }
 
         else if (method == 2) {
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Threshold min adalah : 0 dan max adalah : 255");
 
-            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 1 - 5");
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 1 - 5");
         }
 
         else if (method == 3) {
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Threshold min adalah : 0 dan max adalah : 255");
 
-            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 10 - 25");
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 1 - 5");
         }
 
         else if (method == 4) {
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Threshold min adalah : 0 dan max adalah : 8");
 
-            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 0,1 - 1,5");
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 0,1 - 1");
+
         }
 
         else if (method == 5) {
 
-            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold : 0,5 - 10");
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Threshold min adalah : 0 dan max adalah : 1");
+
+            System.out.println("\u001B[34m[INFO]\u001B[0m : Rekomendasi Threshold dengan pertimbangan kualitas gambar dan kompresi: 0,1-0,5");
         }
 
         System.out.println("");
@@ -121,6 +128,33 @@ public class IO {
                     continue;
                 }
 
+                if (method == 1){
+                    if (Threshold > 255) {
+                        System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan Threshold <= 255 !");
+                        continue;
+                    }
+                } else if (method == 2) {
+                    if (Threshold > 255) {
+                        System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan Threshold <= 255 !");
+                        continue;
+                    }
+                } else if (method == 3) {
+                    if (Threshold > 255) {
+                        System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan Threshold <= 255 !");
+                        continue;
+                    }
+                } else if (method == 4) {
+                    if (Threshold > 8) {
+                        System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan Threshold <= 8 !");
+                        continue;
+                    }
+                } else if (method == 5) {
+                    if (Threshold > 1) {
+                        System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan Threshold <= 1 !");
+                        continue;
+                    }
+                }
+
                 break;
             } catch (InputMismatchException e) { // Tangkap InputMismatchException
                 System.out.println(
@@ -132,6 +166,31 @@ public class IO {
         return Threshold;
     }
 
+    public static double readTargetCompression(){
+        double targetCompression = -1;
+
+        System.out.println("\n\u001B[34m[INFO]\u001B[0m : Masukkan Target Compression (0 - 1) !");
+
+        while (true) {
+            try {
+                System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
+                targetCompression = inputScanner.nextDouble(); 
+                if (targetCompression < 0 || targetCompression > 1) {
+                    System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan Target Compression antara 0-1!");
+                    continue;
+                }
+
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println(
+                        "\u001B[33m[WARNING]\u001B[0m" + " : Masukkan angka yang valid (gunakan koma untuk desimal)!");
+                inputScanner.next(); // Bersihkan input yang salah
+            }
+        }
+
+        return targetCompression;
+    }
+
     public static int readMinBlock(Image img) {
         int minBlock = -1;
 
@@ -141,18 +200,19 @@ public class IO {
                 + " atau " + img.getSize() + " pixel");
         System.out.print("\n\u001B[34m[INFO]\u001B[0m : Masukkan Minimum Block !");
 
-        if (img.getSize() < (128 * 128)) {
-            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 16 - 36 (4x4 - 6x6)");
-        } else if (img.getSize() < (256 * 256)) {
+        if (img.getSize() < (128 * 128)) { 
+            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 16 - 25 (4x4 - 5x5)");
+        } else if (img.getSize() < (256 * 256)) { 
+            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 25 - 36 (5x5 - 6x6)");
+        } else if (img.getSize() < (512 * 512)) { 
             System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 36 - 64 (6x6 - 8x8)");
-        } else if (img.getSize() < (512 * 512)) {
-            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 64 - 144 (8x8 - 12x12)");
-        } else if (img.getSize() < (1024 * 1024)) {
-            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 144 - 256 (12x12 - 16x16)");
-        } else {
-            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 256 - 400 (16x16 - 20x20)");
+        } else if (img.getSize() < (1024 * 1024)) { 
+            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 64 - 100 (8x8 - 10x10)");
+        } else { 
+            System.out.println("\n\u001B[34m[INFO]\u001B[0m : Rekomendasi Minimum Block : 100 - 144 (10x10 - 12x12)");
         }
         System.out.println("");
+        
 
         while (true) {
             try {

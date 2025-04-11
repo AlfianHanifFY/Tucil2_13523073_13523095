@@ -175,7 +175,7 @@ public class Image {
         }
 
         if (method == 5) {
-            return SSIM();
+            return SSIM(r, c, avgP);
         }
 
         // kalo ga ada method yang sesuai
@@ -300,8 +300,58 @@ public class Image {
         return (redEntropy + greenEntropy + blueEntropy) / 3;
     }
 
-    public double SSIM() {
-        return 0;
+    public double SSIM(int width, int height, Pixel avgP) {
+
+        if (width < 2 || height < 2) return 1.0; // node terlalu kecil
+
+        int totalPixels = width * height;
+
+        double meanR = 0, meanG = 0, meanB = 0;
+
+        // Hitung rata-rata warna
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Pixel p = getPixel(i, j);
+                meanR += p.getRed();
+                meanG += p.getGreen();
+                meanB += p.getBlue();
+            }
+        }
+
+        meanR /= totalPixels;
+        meanG /= totalPixels;
+        meanB /= totalPixels;
+
+        double varR = 0, varG = 0, varB = 0;
+
+        // Hitung variansi warna
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Pixel p = getPixel(i, j);
+                double dr = p.getRed() - meanR;
+                double dg = p.getGreen() - meanG;
+                double db = p.getBlue() - meanB;
+
+                varR += dr * dr;
+                varG += dg * dg;
+                varB += db * db;
+            }
+        }
+
+        varR /= totalPixels;
+        varG /= totalPixels;
+        varB /= totalPixels;
+
+
+        // "Pseudo" SSIM untuk tiap channel, semakin kecil variansi semakin mendekati 1
+        double ssimR = (2 * meanR * meanR + 6.5) / (meanR * meanR + varR + 6.5);
+        double ssimG = (2 * meanG * meanG + 6.5) / (meanG * meanG + varG + 6.5);
+        double ssimB = (2 * meanB * meanB + 6.5) / (meanB * meanB + varB + 6.5);
+
+        // Gabungkan
+        double ssimRGB = (ssimR + ssimG + ssimB)/3;
+
+        return ssimRGB;
     }
 
 }

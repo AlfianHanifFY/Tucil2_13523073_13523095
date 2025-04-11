@@ -6,9 +6,9 @@ public class Compressor {
         qt.calcAvgPixel();
         double variance = IO.infoImage.getErrorMeasurement(qt.getStartRow(), qt.getStartCol(), qt.getRow(),
                 qt.getCol(), qt.getAvgPixel());
+        // System.out.println("Variance: " + variance);
 
-        if (qt.getCol() * qt.getRow() <= IO.infoImage.minimumBlockSize
-                || qt.getCol() / 2 * qt.getRow() / 2 <= IO.infoImage.minimumBlockSize) {
+        if (qt.getCol() * qt.getRow() <= IO.infoImage.minimumBlockSize || qt.getCol()/2 * qt.getRow()/2 <= IO.infoImage.minimumBlockSize) {
             return;
         } else if (variance <= IO.infoImage.treshold) {
             return;
@@ -19,6 +19,5 @@ public class Compressor {
             compress(qt.getQ3());
             compress(qt.getQ4());
         }
-
     }
 }

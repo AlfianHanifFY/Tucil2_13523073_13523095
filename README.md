@@ -97,7 +97,7 @@ java -jar Tucil2_13523073_13523095.jar
 - Compile Source Code
 
   ```bash
-  javac -d bin -cp src $(find src -path "_test*" -prune -o -name "*.java" -print)
+  javac -d bin -cp src $(find src -path "*test*" -prune -o -name "*.java" -print)
   ```
 
 - Run Program
