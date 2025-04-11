@@ -20,6 +20,7 @@ Salah satu metode kompresi gambar yang dapat digunakan adalah Quadtree. Metode i
 ├── Tucil2.jar
 ├── bin
 ├── doc
+│   ├── Tucil2_13523073_13523095.pdf
 │   └── river.gif
 ├── manifest.txt
 ├── src
