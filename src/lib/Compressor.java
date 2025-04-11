@@ -8,7 +8,7 @@ public class Compressor {
                 qt.getCol(), qt.getAvgPixel());
         // System.out.println("Variance: " + variance);
 
-        if (qt.getCol() * qt.getRow() <= IO.infoImage.minimumBlockSize && qt.getCol()/2 * qt.getRow()/2 <= IO.infoImage.minimumBlockSize) {
+        if (qt.getCol() * qt.getRow() <= IO.infoImage.minimumBlockSize || qt.getCol()/2 * qt.getRow()/2 <= IO.infoImage.minimumBlockSize) {
             return;
         } else if (variance <= IO.infoImage.treshold) {
             return;
