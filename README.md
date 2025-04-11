@@ -72,7 +72,7 @@ cd Tucil2_13523073_13523095
 Jika ingin langsung menjalankan program tanpa mengompilasi ulang:
 
 ```sh
-java -jar Tucil2_13523073_13523095.jar
+java -jar bin/Tucil2_13523073_13523095.jar
 ```
 
 ### Re-Compile (Optional)
