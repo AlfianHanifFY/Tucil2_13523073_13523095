@@ -62,10 +62,11 @@ public class IO {
             try {
                 System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
                 method = inputScanner.nextInt();
-                if (method >= 1 || method <= 5) {
+                System.out.println(method);
+                if (method >= 1 && method <= 5) {
                     break;
                 } else {
-                    System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan integer (1 -- 5) !");
+                    System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan integer (1 -- 4) !");
                 }
 
             } catch (NumberFormatException e) {
@@ -76,7 +77,6 @@ public class IO {
 
     }
 
-    /* HARUS DIUBAH */
     public static double readThreshold(int method) {
         double Threshold = -1;
 
@@ -130,6 +130,31 @@ public class IO {
         }
 
         return Threshold;
+    }
+
+    public static double readTargetCompression(){
+        double targetCompression = -1;
+
+        System.out.println("\n\u001B[34m[INFO]\u001B[0m : Masukkan Target Compression (0 - 1) !");
+
+        while (true) {
+            try {
+                System.out.print("\u001B[38;5;214m[INPUT]\u001B[0m" + " : ");
+                targetCompression = inputScanner.nextDouble(); 
+                if (targetCompression < 0 || targetCompression > 1) {
+                    System.out.println("\u001B[33m[WARNING]\u001B[0m" + " : Masukkan Target Compression antara 0-1!");
+                    continue;
+                }
+
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println(
+                        "\u001B[33m[WARNING]\u001B[0m" + " : Masukkan angka yang valid (gunakan koma untuk desimal)!");
+                inputScanner.next(); // Bersihkan input yang salah
+            }
+        }
+
+        return targetCompression;
     }
 
     public static int readMinBlock(Image img) {
