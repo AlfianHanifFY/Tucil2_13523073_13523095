@@ -6,7 +6,7 @@ public class Compressor {
         qt.calcAvgPixel();
         double variance = IO.infoImage.getErrorMeasurement(qt.getStartRow(), qt.getStartCol(), qt.getRow(),
                 qt.getCol(), qt.getAvgPixel());
-        System.out.println("Variance: " + variance);
+        // System.out.println("Variance: " + variance);
 
         if (qt.getCol() * qt.getRow() <= IO.infoImage.minimumBlockSize) {
             return;

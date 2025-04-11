@@ -52,6 +52,8 @@ public class main {
                     upperBound = 255;
                 } else if (method == 4) {
                     upperBound = 8;
+                } else if (method == 5) {
+                    upperBound = 1;
                 }
                 double tolerance = 0.01;
                 double bestThreshold = Threshold;
@@ -128,9 +130,9 @@ public class main {
                     IO.saveImage(outputFile, finalQuadtree);
             
                 } else {
-                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Tidak dapat menemukan threshold yang memenuhi sesuai dengan metode error untuk mencapai target kompresi dengan min block size." + minBlock);   
-                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Compression rate terbesar yang dicapai: " + maxCompressionRate + "%");
-                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Compression rate terkecil yang dicapai: " + minCompressionRate + "%");
+                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Tidak dapat menemukan threshold yang memenuhi sesuai dengan metode error untuk mencapai target kompresi dengan min block size " + minBlock);   
+                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Compression rate terbesar yang dicapai: " + maxCompressionRate/100);
+                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Compression rate terkecil yang dicapai: " + minCompressionRate/100);
                 }
             }
 
@@ -139,7 +141,7 @@ public class main {
                 BufferedImage[] frames = IO.reconstructImageByDepth(quadtree, IO.infoImage.getCol(),
                         IO.infoImage.getRow());
                 IO.createGIF(frames, outputGIFFile, 500);
-                System.out.println("\u001B[32m[SUKSES]\u001B[0m : GIF berhasil dibuat di " + outputGIFFile);
+                // System.out.println("\u001B[32m[SUKSES]\u001B[0m : GIF berhasil dibuat di " + outputGIFFile);
                 gifSuccess = true;
             } catch (OutOfMemoryError e) {
                 System.out.println("\u001B[31m[ERROR]\u001B[0m : Memori tidak cukup saat membuat GIF.");
@@ -175,7 +177,7 @@ public class main {
                 System.out
                         .println("\u001B[32m[SUKSES]\u001B[0m : Gambar berhasil disimpan sebagai " + outputFile + "\n");
                 
-
+                System.out.println("\u001B[32m[SUKSES]\u001B[0m : GIF berhasil dibuat di " + outputGIFFile);
                 // Kesimpulan
                 System.out.println("\n\u001B[34m[INFO]\u001B[0m : Status akhir proses:");
                 System.out.println(" - Kompresi Gambar : "
