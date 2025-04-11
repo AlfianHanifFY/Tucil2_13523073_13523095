@@ -14,34 +14,42 @@ public class main {
             System.out.println("\u001B[34m[INFO]\u001B[0m : Masukkan alamat ABSOLUT image !\n");
 
             String inputFile = IO.readFileName();
-            IO.readImage(inputFile);
+
             int method = IO.readErorrMethod();
             double Threshold = IO.readThreshold(method);
-            int minBlock = IO.readMinBlock(IO.infoImage);
+            int minBlock = IO.readMinBlock();
             double targetKompresi = IO.readTargetCompression();
-            IO.infoImage.setImageParam(method, Threshold, minBlock);
+
             String outputFile = IO.readOutputPath(inputFile);
             String outputGIFFile = IO.readOutputGIFPath();
 
-            long startTime = System.currentTimeMillis();
-            Quadtree quadtree = new Quadtree(IO.infoImage.getRow(), IO.infoImage.getCol(), 0, 0);
+            Quadtree quadtree;
 
             boolean compressionSuccess = false;
             boolean gifSuccess = false;
+
+            long startTime = System.currentTimeMillis();
             if (targetKompresi == 0) {
                 System.out.println("\n\u001B[34m[INFO]\u001B[0m : Memproses gambar dengan Quadtree...\n");
+                IO.readImage(inputFile);
+                IO.infoImage.setImageParam(method, Threshold, minBlock);
+                quadtree = new Quadtree(IO.infoImage.getRow(), IO.infoImage.getCol(), 0, 0);
                 try {
                     Compressor.compress(quadtree);
 
                     IO.saveImage(outputFile, quadtree);
                     compressionSuccess = true;
                 } catch (Exception e) {
-                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Terjadi kesalahan saat kompresi gambar - " + e.getMessage());
+                    System.out.println(
+                            "\u001B[31m[ERROR]\u001B[0m : Terjadi kesalahan saat kompresi gambar - " + e.getMessage());
                 }
 
-            }
-            else {
-                System.out.println("\n\u001B[34m[INFO]\u001B[0m : Memproses gambar dengan Quadtree untuk mencapai target kompresi ...\n");
+            } else {
+                System.out.println(
+                        "\n\u001B[34m[INFO]\u001B[0m : Memproses gambar dengan Quadtree untuk mencapai target kompresi ...\n");
+                IO.readImage(inputFile);
+                IO.infoImage.setImageParam(method, Threshold, minBlock);
+                quadtree = new Quadtree(IO.infoImage.getRow(), IO.infoImage.getCol(), 0, 0);
                 double lowerBound = 0;
                 double upperBound = 255;
                 if (method == 1) {
@@ -71,77 +79,82 @@ public class main {
                 IO.saveImage(outputFile, quadtree);
                 minCompressionRate = IO.calculateCompressionPercentage(IO.getFileSize(inputFile),
                         IO.getFileSize(outputFile));
-            
+
                 while (upperBound - lowerBound > tolerance) {
                     double midThreshold = (lowerBound + upperBound) / 2;
                     // System.out.println("[INFO] : Mencoba threshold " + midThreshold);
-            
+
                     IO.infoImage.setImageParam(method, midThreshold, minBlock);
                     Quadtree tempquadtree = new Quadtree(IO.infoImage.getRow(), IO.infoImage.getCol(), 0, 0);
-            
+
                     try {
                         Compressor.compress(tempquadtree);
-            
+
                         // Simpan hasil kompres sementara ke file sementara
                         String tempOutputFile = "temp_output_" + midThreshold + ".jpg";
                         IO.saveImage(tempOutputFile, tempquadtree);
-            
+
                         long inputSize = IO.getFileSize(inputFile);
                         long outputSize = IO.getFileSize(tempOutputFile);
                         currentCompressionRate = IO.calculateCompressionPercentage(inputSize, outputSize);
                         // System.out.println("[INFO] : lowerBound : " + lowerBound);
                         // System.out.println("[INFO] : upperBound : " + upperBound);
-                        // System.out.println("[INFO] : Persentase kompresi : " + currentCompressionRate/100 + "%");
-            
-                        // Hapus file sementara 
+                        // System.out.println("[INFO] : Persentase kompresi : " +
+                        // currentCompressionRate/100 + "%");
+
+                        // Hapus file sementara
                         new java.io.File(tempOutputFile).delete();
-            
-                        if (Math.abs(currentCompressionRate/100 - targetKompresi) <= tolerance) {
+
+                        if (Math.abs(currentCompressionRate / 100 - targetKompresi) <= tolerance) {
                             bestThreshold = midThreshold;
                             found = true;
                             compressionSuccess = true;
                             break;
                         }
-                    
-            
-                        if (currentCompressionRate/100 > targetKompresi) {
+
+                        if (currentCompressionRate / 100 > targetKompresi) {
                             upperBound = midThreshold;
                         } else {
                             lowerBound = midThreshold;
                         }
 
                     } catch (OutOfMemoryError e) {
-                        System.out.println("\u001B[31m[ERROR]\u001B[0m : Memori tidak cukup saat mencoba threshold " + midThreshold);
+                        System.out.println("\u001B[31m[ERROR]\u001B[0m : Memori tidak cukup saat mencoba threshold "
+                                + midThreshold);
                         upperBound = midThreshold; // Coba threshold lebih rendah
                     } catch (Exception e) {
-                        System.out.println("\u001B[31m[ERROR]\u001B[0m : Kesalahan saat mencoba threshold " + midThreshold + " - " + e.getMessage());
+                        System.out.println("\u001B[31m[ERROR]\u001B[0m : Kesalahan saat mencoba threshold "
+                                + midThreshold + " - " + e.getMessage());
                         upperBound = midThreshold; // Coba threshold lebih rendah
                     }
                 }
-                
-                
-                
+
                 if (found) {
-                    System.out.println("[INFO] : Threshold terbaik ditemukan: " + bestThreshold);
+                    System.out.println("\u001B[34m[INFO]\u001B[0m : Threshold terbaik ditemukan: " + bestThreshold);
                     IO.infoImage.setImageParam(method, bestThreshold, minBlock);
                     Quadtree finalQuadtree = new Quadtree(IO.infoImage.getRow(), IO.infoImage.getCol(), 0, 0);
                     quadtree = finalQuadtree;
                     Compressor.compress(finalQuadtree);
                     IO.saveImage(outputFile, finalQuadtree);
-            
+
                 } else {
-                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Tidak dapat menemukan threshold yang memenuhi sesuai dengan metode error untuk mencapai target kompresi dengan min block size " + minBlock);   
-                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Compression rate terbesar yang dicapai: " + maxCompressionRate/100);
-                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Compression rate terkecil yang dicapai: " + minCompressionRate/100);
+                    System.out.println(
+                            "\u001B[31m[ERROR]\u001B[0m : Tidak dapat menemukan threshold yang memenuhi sesuai dengan metode error untuk mencapai target kompresi dengan min block size "
+                                    + minBlock);
+                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Compression rate terbesar yang dicapai: "
+                            + maxCompressionRate / 100);
+                    System.out.println("\u001B[31m[ERROR]\u001B[0m : Compression rate terkecil yang dicapai: "
+                            + minCompressionRate / 100);
                 }
             }
 
             // Buat GIF
             try {
-                BufferedImage[] frames = IO.reconstructImageByDepth(quadtree, IO.infoImage.getCol(),
+                BufferedImage[] frames = IO.createProcessBufferedImages(quadtree, IO.infoImage.getCol(),
                         IO.infoImage.getRow());
                 IO.createGIF(frames, outputGIFFile, 500);
-                // System.out.println("\u001B[32m[SUKSES]\u001B[0m : GIF berhasil dibuat di " + outputGIFFile);
+                // System.out.println("\u001B[32m[SUKSES]\u001B[0m : GIF berhasil dibuat di " +
+                // outputGIFFile);
                 gifSuccess = true;
             } catch (OutOfMemoryError e) {
                 System.out.println("\u001B[31m[ERROR]\u001B[0m : Memori tidak cukup saat membuat GIF.");
@@ -154,7 +167,7 @@ public class main {
             try {
                 long endTime = System.currentTimeMillis();
                 long executionTime = endTime - startTime;
-                System.out.println("\u001B[32m--------[OUTPUT KOMPRESI]--------\u001B[0m");
+                System.out.println("\n\n\u001B[32m--------[OUTPUT KOMPRESI]--------\u001B[0m");
                 System.out.println("\u001B[32m[SUKSES]\u001B[0m : Waktu Eksekusi : " + executionTime + " milliseconds");
 
                 long fileInputSizeInBytes = IO.getFileSize(inputFile);
@@ -176,7 +189,7 @@ public class main {
 
                 System.out
                         .println("\u001B[32m[SUKSES]\u001B[0m : Gambar berhasil disimpan sebagai " + outputFile + "\n");
-                
+
                 System.out.println("\u001B[32m[SUKSES]\u001B[0m : GIF berhasil dibuat di " + outputGIFFile);
                 // Kesimpulan
                 System.out.println("\n\u001B[34m[INFO]\u001B[0m : Status akhir proses:");
@@ -195,7 +208,8 @@ public class main {
                 status = (pilihan == 1);
                 System.out.println();
             } catch (Exception e) {
-                System.out.println("\u001B[31m[ERROR]\u001B[0m : Terjadi kesalahan saat menampilkan hasil - " + e.getMessage());
+                System.out.println(
+                        "\u001B[31m[ERROR]\u001B[0m : Terjadi kesalahan saat menampilkan hasil - " + e.getMessage());
             }
         }
         System.out.println("\u001B[34m[INFO]\u001B[0m : Program selesai. Hatur nuhun!");
